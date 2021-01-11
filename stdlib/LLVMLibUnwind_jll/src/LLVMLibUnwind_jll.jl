@@ -18,7 +18,7 @@ artifact_dir = ""
 llvmlibunwind_handle = C_NULL
 llvmlibunwind_path = ""
 
-const llvmlibunwind = "@rpath/libunwind.1.dylib"
+const llvmlibunwind = "libunwind"
 
 function __init__()
     global artifact_dir = dirname(Sys.BINDIR)
