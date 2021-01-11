@@ -88,11 +88,19 @@ $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-compiled: $(BUILDDIR)/llvmunwind-
 	$(MAKE) -C $(dir $<)
 	echo 1 > $@
 
-$(eval $(call staged-install, \
-	llvmunwind,llvmunwind-$(LLVMUNWIND_VER), \
-	MAKE_INSTALL,,,))
+$(build_prefix)/manifest/llvmunwind: $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-compiled | $(build_libdir) $(build_shlibdir) $(build_includedir) $(build_prefix)/manifest
+	cp $(dir $<)/lib/libunwind.a $(build_libdir)/libunwind.a
+	cp $(dir $<)/lib/libunwind.$(SHLIB_EXT) $(build_shlibdir)/libunwind.$(SHLIB_EXT)
+	ln -sf libunwind.$(SHLIB_EXT) $(build_shlibdir)/libunwind.$(JL_MAJOR_SHLIB_EXT)
+	$(INSTALL_NAME_CMD)libunwind.$(SHLIB_EXT) $(build_shlibdir)/libunwind.$(SHLIB_EXT)
+	echo $(LLVMUNWIND_VER) > $(build_prefix)/manifest/llvmunwind
+
+# $(eval $(call staged-install, \
+# 	llvmunwind,llvmunwind-$(LLVMUNWIND_VER), \
+# 	MAKE_INSTALL,,,))
 
 clean-llvmunwind:
+	-rm $(build_prefix)/manifest/llvmunwind
 	-rm $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-configured $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-compiled
 	-$(MAKE) -C $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER) clean
 
@@ -107,6 +115,7 @@ configure-llvmunwind: $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-configured
 compile-llvmunwind: $(BUILDDIR)/llvmunwind-$(LLVMUNWIND_VER)/build-compiled
 fastcheck-llvmunwind: check-llvmunwind
 check-llvmunwind: # no test/check provided by Makefile
+install-llvmunwind: $(build_prefix)/manifest/llvmunwind
 
 else # USE_BINARYBUILDER_LIBUNWIND
 
