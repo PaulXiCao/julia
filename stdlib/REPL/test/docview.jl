@@ -21,6 +21,15 @@ import Markdown
         end, "\"ᵞ₁₂₃¹²³α\" can be typed by \\^gamma<tab>\\_123<tab>\\^123<tab>\\alpha<tab>\n")
 end
 
+@testset "quoting in doc search" begin
+    str = let buf = IOBuffer()
+        Core.eval(Main, REPL.helpmode(buf, "mutable s"))
+        String(take!(buf))
+    end
+    @test occursin("'mutable struct'", str)
+    @test occursin("Couldn't find 'mutable s'")
+end
+
 @testset "Non-Markdown" begin
     # https://github.com/JuliaLang/julia/issues/37765
     @test isa(REPL.insert_hlines(IOBuffer(), Markdown.Text("foo")), Markdown.Text)
