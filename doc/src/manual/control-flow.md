@@ -598,11 +598,11 @@ below all interrupt the normal flow of control.
 | [`KeyError`](@ref)            |
 | [`LoadError`](@ref)           |
 | [`OutOfMemoryError`](@ref)    |
-| [`ReadOnlyMemoryError`](@ref) |
-| [`RemoteException`](@ref)     |
-| [`MethodError`](@ref)         |
 | [`OverflowError`](@ref)       |
 | [`Meta.ParseError`](@ref)     |
+| [`MethodError`](@ref)         |
+| [`ReadOnlyMemoryError`](@ref) |
+| [`RemoteException`](@ref)     |
 | [`SystemError`](@ref)         |
 | [`TypeError`](@ref)           |
 | [`UndefRefError`](@ref)       |
